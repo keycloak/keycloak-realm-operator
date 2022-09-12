@@ -1,13 +1,13 @@
 package model
 
 import (
-	"github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
+	"github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
 	v1 "k8s.io/api/core/v1"
 	v12 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-func KeycloakAdminSecret(cr *v1alpha1.Keycloak) *v1.Secret {
+func KeycloakAdminSecret(cr *v1alpha1.ExternalKeycloak) *v1.Secret {
 	return &v1.Secret{
 		ObjectMeta: v12.ObjectMeta{
 			Name:      "credential-" + cr.Name,
@@ -25,14 +25,14 @@ func KeycloakAdminSecret(cr *v1alpha1.Keycloak) *v1.Secret {
 	}
 }
 
-func KeycloakAdminSecretSelector(cr *v1alpha1.Keycloak) client.ObjectKey {
+func KeycloakAdminSecretSelector(cr *v1alpha1.ExternalKeycloak) client.ObjectKey {
 	return client.ObjectKey{
 		Name:      "credential-" + cr.Name,
 		Namespace: cr.Namespace,
 	}
 }
 
-func KeycloakAdminSecretReconciled(cr *v1alpha1.Keycloak, currentState *v1.Secret) *v1.Secret {
+func KeycloakAdminSecretReconciled(cr *v1alpha1.ExternalKeycloak, currentState *v1.Secret) *v1.Secret {
 	reconciled := currentState.DeepCopy()
 	if val, ok := reconciled.Data[AdminUsernameProperty]; !ok || len(val) == 0 {
 		reconciled.Data[AdminUsernameProperty] = []byte("admin")

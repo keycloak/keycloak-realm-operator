@@ -3,8 +3,8 @@ package common
 import (
 	"context"
 
-	"github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
-	"github.com/keycloak/keycloak-operator/pkg/model"
+	"github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
+	"github.com/keycloak/keycloak-realm-operator/pkg/model"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -18,11 +18,11 @@ type UserState struct {
 	AvailableRealmRoles  []*v1alpha1.KeycloakUserRole
 	Clients              []*v1alpha1.KeycloakAPIClient
 	Secret               *v1.Secret
-	Keycloak             v1alpha1.Keycloak
+	Keycloak             v1alpha1.ExternalKeycloak
 	Context              context.Context
 }
 
-func NewUserState(keycloak v1alpha1.Keycloak) *UserState {
+func NewUserState(keycloak v1alpha1.ExternalKeycloak) *UserState {
 	return &UserState{
 		ClientRoles:          map[string][]*v1alpha1.KeycloakUserRole{},
 		AvailableClientRoles: map[string][]*v1alpha1.KeycloakUserRole{},

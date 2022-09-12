@@ -15,6 +15,6 @@ FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
 RUN microdnf update && microdnf clean all && rm -rf /var/cache/yum/*
 
 COPY --from=build-env /src/BUILD_INFO /src/BUILD_INFO
-COPY --from=build-env /src/tmp/_output/bin/keycloak-operator /usr/local/bin
+COPY --from=build-env /src/tmp/_output/bin/keycloak-realm-operator /usr/local/bin
 
-ENTRYPOINT ["/usr/local/bin/keycloak-operator"]
+ENTRYPOINT ["/usr/local/bin/keycloak-realm-operator"]

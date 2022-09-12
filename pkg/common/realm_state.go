@@ -3,8 +3,8 @@ package common
 import (
 	"context"
 
-	kc "github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
-	"github.com/keycloak/keycloak-operator/pkg/model"
+	kc "github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
+	"github.com/keycloak/keycloak-realm-operator/pkg/model"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -14,10 +14,10 @@ type RealmState struct {
 	Realm            *kc.KeycloakRealm
 	RealmUserSecrets map[string]*v1.Secret
 	Context          context.Context
-	Keycloak         *kc.Keycloak
+	Keycloak         *kc.ExternalKeycloak
 }
 
-func NewRealmState(context context.Context, keycloak kc.Keycloak) *RealmState {
+func NewRealmState(context context.Context, keycloak kc.ExternalKeycloak) *RealmState {
 	return &RealmState{
 		Context:  context,
 		Keycloak: &keycloak,

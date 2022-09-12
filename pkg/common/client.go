@@ -13,8 +13,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
-	"github.com/keycloak/keycloak-operator/pkg/model"
+	"github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
+	"github.com/keycloak/keycloak-realm-operator/pkg/model"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	k8sErrors "k8s.io/apimachinery/pkg/api/errors"
@@ -1008,14 +1008,14 @@ var _ KeycloakInterface = &Client{}
 
 //KeycloakClientFactory interface
 type KeycloakClientFactory interface {
-	AuthenticatedClient(kc v1alpha1.Keycloak) (KeycloakInterface, error)
+	AuthenticatedClient(kc v1alpha1.ExternalKeycloak) (KeycloakInterface, error)
 }
 
 type LocalConfigKeycloakFactory struct {
 }
 
 // AuthenticatedClient returns an authenticated client for requesting endpoints from the Keycloak api
-func (i *LocalConfigKeycloakFactory) AuthenticatedClient(kc v1alpha1.Keycloak, insecureSsl bool) (KeycloakInterface, error) {
+func (i *LocalConfigKeycloakFactory) AuthenticatedClient(kc v1alpha1.ExternalKeycloak, insecureSsl bool) (KeycloakInterface, error) {
 	config, err := config2.GetConfig()
 	if err != nil {
 		return nil, err
@@ -1026,12 +1026,13 @@ func (i *LocalConfigKeycloakFactory) AuthenticatedClient(kc v1alpha1.Keycloak, i
 		return nil, err
 	}
 
-	var credentialSecret string
-	if kc.Spec.External.Enabled {
-		credentialSecret = "credential-" + kc.Name
-	} else {
-		credentialSecret = kc.Status.CredentialSecret
-	}
+	//var credentialSecret string
+	//if kc.Spec.External.Enabled {
+	//	credentialSecret = "credential-" + kc.Name
+	//} else {
+	//	credentialSecret = kc.Status.CredentialSecret
+	//}
+	credentialSecret := "credential-" + kc.Name
 
 	adminCreds, err := secretClient.CoreV1().Secrets(kc.Namespace).Get(context.TODO(), credentialSecret, v12.GetOptions{})
 	if err != nil {
@@ -1059,9 +1060,10 @@ func (i *LocalConfigKeycloakFactory) AuthenticatedClient(kc v1alpha1.Keycloak, i
 	}
 
 	var contextRoot string
-	if kc.Spec.External.Enabled && kc.Spec.Unmanaged {
-		contextRoot += kc.Spec.External.ContextRoot
-	}
+	//if kc.Spec.External.Enabled && kc.Spec.Unmanaged {
+	//	contextRoot += kc.Spec.External.ContextRoot
+	//}
+	contextRoot += kc.Spec.ContextRoot
 
 	client := &Client{
 		URL:         kcURL,
@@ -1074,7 +1076,7 @@ func (i *LocalConfigKeycloakFactory) AuthenticatedClient(kc v1alpha1.Keycloak, i
 	return client, nil
 }
 
-func getKCServerCert(secretClient *kubernetes.Clientset, kc v1alpha1.Keycloak) ([]byte, error) {
+func getKCServerCert(secretClient *kubernetes.Clientset, kc v1alpha1.ExternalKeycloak) ([]byte, error) {
 	sslCertsSecret, err := secretClient.CoreV1().Secrets(kc.Namespace).Get(context.TODO(), model.ServingCertSecretName, v12.GetOptions{})
 	switch {
 	case err == nil:
@@ -1089,7 +1091,7 @@ func getKCServerCert(secretClient *kubernetes.Clientset, kc v1alpha1.Keycloak) (
 // At normal conditions, Keycloak should be accessible via the internalURL. However, there are some corner cases (like
 // operator running locally during development or services being inaccessible due to network policies) which requires
 // use of externalURL.
-func getKeycloakURL(kc v1alpha1.Keycloak, requester Requester) (string, error) {
+func getKeycloakURL(kc v1alpha1.ExternalKeycloak, requester Requester) (string, error) {
 	var kcURL string
 	var err error
 

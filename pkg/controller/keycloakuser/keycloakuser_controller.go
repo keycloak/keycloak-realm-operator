@@ -5,13 +5,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/pkg/errors"
-
-	"github.com/keycloak/keycloak-operator/pkg/common"
+	"github.com/keycloak/keycloak-realm-operator/pkg/common"
 
 	"k8s.io/client-go/tools/record"
 
-	kc "github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
+	kc "github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
 	kubeerrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -141,9 +139,9 @@ func (r *ReconcileKeycloakUser) Reconcile(request reconcile.Request) (reconcile.
 	log.Info(fmt.Sprintf("found %v matching realm(s) for user %v/%v", len(realms.Items), instance.Namespace, instance.Name))
 
 	for _, realm := range realms.Items {
-		if realm.Spec.Unmanaged {
-			return r.ManageError(instance, errors.Errorf("users cannot be created for unmanaged keycloak realms"))
-		}
+		//if realm.Spec.Unmanaged {
+		//	return r.ManageError(instance, errors.Errorf("users cannot be created for unmanaged keycloak realms"))
+		//}
 
 		keycloaks, err := common.GetMatchingKeycloaks(r.context, r.client, realm.Spec.InstanceSelector)
 		if err != nil {
@@ -151,9 +149,9 @@ func (r *ReconcileKeycloakUser) Reconcile(request reconcile.Request) (reconcile.
 		}
 
 		for _, keycloak := range keycloaks.Items {
-			if keycloak.Spec.Unmanaged {
-				return r.ManageError(instance, errors.Errorf("users cannot be created for unmanaged keycloak instances"))
-			}
+			//if keycloak.Spec.Unmanaged {
+			//	return r.ManageError(instance, errors.Errorf("users cannot be created for unmanaged keycloak instances"))
+			//}
 
 			// Get an authenticated keycloak api client for the instance
 			keycloakFactory := common.LocalConfigKeycloakFactory{}

@@ -1,0 +1,20 @@
+# This is a reference for the Realm Manager Operator
+apiVersion: legacy.k8s.keycloak.org/v1alpha1
+kind: ExternalKeycloak
+metadata:
+  name: external-keycloak
+  labels:
+    app: external-sso
+spec:
+  url: https://example-kc-service:8443 # set to the Service created by the new Keycloak Operator
+  contextRoot: /
+---
+# The Admin Credentials need to match those used/created by the new Keycloak Operator
+apiVersion: v1
+kind: Secret
+metadata:
+  name: credential-external-keycloak
+type: Opaque
+stringData:
+  ADMIN_USERNAME: admin
+  ADMIN_PASSWORD: admin

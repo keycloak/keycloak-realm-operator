@@ -1,4 +1,4 @@
-module github.com/keycloak/keycloak-operator
+module github.com/keycloak/keycloak-realm-operator
 
 require (
 	github.com/coreos/prometheus-operator v0.40.0
@@ -16,7 +16,6 @@ require (
 	k8s.io/apimachinery v0.20.6
 	k8s.io/client-go v12.0.0+incompatible
 	k8s.io/kube-openapi v0.0.0-20201113171705-d219536bb9fd
-	k8s.io/utils v0.0.0-20201110183641-67b214c5f920
 	sigs.k8s.io/controller-runtime v0.6.0
 
 )

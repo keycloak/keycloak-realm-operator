@@ -1,3 +1,0 @@
-= Documentation has been moved
-
-Please navigate to https://www.keycloak.org/docs/latest/server_installation/index.html#_operator
