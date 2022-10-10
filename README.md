@@ -15,7 +15,7 @@ limited to:
 
 * File store (expected in Keycloak 20) to persist data in a file instead of DB.
 * Read-only administration REST API, UI Console and other interfaces. This is required for the new immutability concept
-  which will be used to ensure any data coming from the CRs (and subsequently from the file store) are read-only from
+  which will be used to ensure any data coming from the CRs or GitOps (and subsequently from the file store) are read-only from
   all interfaces.
 
 All of this is critical to proper CRs implementation, hence the new Keycloak Operator is currently missing the CRDs for managing
@@ -50,14 +50,14 @@ Another temporary workaround to the missing CRs is to use this Realm Operator in
 
 2.  Deploy the Realm Operator.
     ```
-    kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-realm-operator/main/deploy/crds/legacy.k8s.keycloak.org_externalkeycloaks_crd.yml
-    kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-realm-operator/main/deploy/crds/legacy.k8s.keycloak.org_keycloakclients_crd.yml
-    kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-realm-operator/main/deploy/crds/legacy.k8s.keycloak.org_keycloakrealms_crd.yml
-    kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-realm-operator/main/deploy/crds/legacy.k8s.keycloak.org_keycloakusers_crd.yml
+    kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-realm-operator/main/deploy/crds/legacy.k8s.keycloak.org_externalkeycloaks_crd.yaml
+    kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-realm-operator/main/deploy/crds/legacy.k8s.keycloak.org_keycloakclients_crd.yaml
+    kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-realm-operator/main/deploy/crds/legacy.k8s.keycloak.org_keycloakrealms_crd.yaml
+    kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-realm-operator/main/deploy/crds/legacy.k8s.keycloak.org_keycloakusers_crd.yaml
     kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-realm-operator/main/deploy/role.yaml
     kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-realm-operator/main/deploy/role_binding.yaml
     kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-realm-operator/main/deploy/service_account.yaml
-    kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-realm-operatpr/main/deploy/operator.yaml
+    kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-realm-operator/main/deploy/operator.yaml
     ```
 
 3.  Deploy Quarkus distribution of Keycloak using the new Keycloak Operator.
