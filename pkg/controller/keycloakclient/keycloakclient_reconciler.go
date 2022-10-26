@@ -3,11 +3,11 @@ package keycloakclient
 import (
 	"fmt"
 
-	"github.com/keycloak/keycloak-operator/pkg/controller/keycloakuser"
+	"github.com/keycloak/keycloak-realm-operator/pkg/controller/keycloakuser"
 
-	kc "github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
-	"github.com/keycloak/keycloak-operator/pkg/common"
-	"github.com/keycloak/keycloak-operator/pkg/model"
+	kc "github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
+	"github.com/keycloak/keycloak-realm-operator/pkg/common"
+	"github.com/keycloak/keycloak-realm-operator/pkg/model"
 )
 
 const (
@@ -19,10 +19,10 @@ type Reconciler interface {
 }
 
 type KeycloakClientReconciler struct { // nolint
-	Keycloak kc.Keycloak
+	Keycloak kc.ExternalKeycloak
 }
 
-func NewKeycloakClientReconciler(keycloak kc.Keycloak) *KeycloakClientReconciler {
+func NewKeycloakClientReconciler(keycloak kc.ExternalKeycloak) *KeycloakClientReconciler {
 	return &KeycloakClientReconciler{
 		Keycloak: keycloak,
 	}

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
+	"github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -15,17 +15,10 @@ import (
 
 // These kinds are not provided by the openshift api
 const (
-	RouteKind                 = "Route"
-	JobKind                   = "Job"
-	CronJobKind               = "CronJob"
-	SecretKind                = "Secret"
-	StatefulSetKind           = "StatefulSet"
-	ServiceKind               = "Service"
-	IngressKind               = "Ingress"
-	DeploymentKind            = "Deployment"
-	PersistentVolumeClaimKind = "PersistentVolumeClaim"
-	PodDisruptionBudgetKind   = "PodDisruptionBudget"
-	OpenShiftAPIServerKind    = "OpenShiftAPIServer"
+	RouteKind               = "Route"
+	SecretKind              = "Secret"
+	PodDisruptionBudgetKind = "PodDisruptionBudget"
+	OpenShiftAPIServerKind  = "OpenShiftAPIServer"
 )
 
 func WatchSecondaryResource(c controller.Controller, controllerName string, resourceKind string, objectTypetoWatch runtime.Object, cr runtime.Object) error {
@@ -62,8 +55,8 @@ func GetStateFieldName(controllerName string, kind string) string {
 }
 
 // Try to get a list of keycloak instances that match the selector specified on the realm
-func GetMatchingKeycloaks(ctx context.Context, c client.Client, labelSelector *v1.LabelSelector) (v1alpha1.KeycloakList, error) {
-	var list v1alpha1.KeycloakList
+func GetMatchingKeycloaks(ctx context.Context, c client.Client, labelSelector *v1.LabelSelector) (v1alpha1.ExternalKeycloakList, error) {
+	var list v1alpha1.ExternalKeycloakList
 	opts := []client.ListOption{
 		client.MatchingLabels(labelSelector.MatchLabels),
 	}

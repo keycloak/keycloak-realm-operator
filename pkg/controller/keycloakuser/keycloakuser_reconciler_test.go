@@ -5,13 +5,13 @@ import (
 
 	v12 "k8s.io/api/core/v1"
 
-	"github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
-	"github.com/keycloak/keycloak-operator/pkg/common"
+	"github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
+	"github.com/keycloak/keycloak-realm-operator/pkg/common"
 	"github.com/stretchr/testify/assert"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func getDummyState(keycloak v1alpha1.Keycloak) *common.UserState {
+func getDummyState(keycloak v1alpha1.ExternalKeycloak) *common.UserState {
 	return common.NewUserState(keycloak)
 }
 
@@ -85,7 +85,7 @@ func getDummyRealm() v1alpha1.KeycloakRealm {
 
 func TestKeycloakRealmReconciler_Reconcile(t *testing.T) {
 	// given
-	keycloak := v1alpha1.Keycloak{}
+	keycloak := v1alpha1.ExternalKeycloak{}
 	realm := getDummyRealm()
 	reconciler := NewKeycloakuserReconciler(keycloak, realm)
 	state := getDummyState(keycloak)

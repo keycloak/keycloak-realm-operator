@@ -34,7 +34,7 @@ not be able to respond to your PR immediately. The best place to ping us is on t
 
 If you would like to contribute to Keycloak, but are not sure exactly what to work on, you can find a number of open
 issues that are awaiting contributions in the 
-[GitHub Issues](https://github.com/keycloak/keycloak-operator/issues?q=is%3Aopen+is%3Aissue+no%3Aassignee).
+[GitHub Issues](https://github.com/keycloak/realm-management-operator/issues?q=is%3Aopen+is%3Aissue+no%3Aassignee).
 
 ### Open a discussion on Keycloak Dev Mailing List
 

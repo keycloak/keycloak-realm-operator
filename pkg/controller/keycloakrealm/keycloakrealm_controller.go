@@ -5,11 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/pkg/errors"
-
-	"github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
-	kc "github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
-	"github.com/keycloak/keycloak-operator/pkg/common"
+	"github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
+	kc "github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
+	"github.com/keycloak/keycloak-realm-operator/pkg/common"
 	corev1 "k8s.io/api/core/v1"
 	kubeerrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -140,9 +138,9 @@ func (r *ReconcileKeycloakRealm) Reconcile(request reconcile.Request) (reconcile
 		// Get an authenticated keycloak api client for the instance
 		keycloakFactory := common.LocalConfigKeycloakFactory{}
 
-		if keycloak.Spec.Unmanaged {
-			return r.ManageError(instance, errors.Errorf("realms cannot be created for unmanaged keycloak instances"))
-		}
+		//if keycloak.Spec.Unmanaged {
+		//	return r.ManageError(instance, errors.Errorf("realms cannot be created for unmanaged keycloak instances"))
+		//}
 
 		authenticated, err := keycloakFactory.AuthenticatedClient(keycloak, false)
 

@@ -3,9 +3,9 @@ package keycloakrealm
 import (
 	"fmt"
 
-	kc "github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
-	"github.com/keycloak/keycloak-operator/pkg/common"
-	"github.com/keycloak/keycloak-operator/pkg/model"
+	kc "github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
+	"github.com/keycloak/keycloak-realm-operator/pkg/common"
+	"github.com/keycloak/keycloak-realm-operator/pkg/model"
 )
 
 type Reconciler interface {
@@ -13,10 +13,10 @@ type Reconciler interface {
 }
 
 type KeycloakRealmReconciler struct { // nolint
-	Keycloak kc.Keycloak
+	Keycloak kc.ExternalKeycloak
 }
 
-func NewKeycloakRealmReconciler(keycloak kc.Keycloak) *KeycloakRealmReconciler {
+func NewKeycloakRealmReconciler(keycloak kc.ExternalKeycloak) *KeycloakRealmReconciler {
 	return &KeycloakRealmReconciler{
 		Keycloak: keycloak,
 	}

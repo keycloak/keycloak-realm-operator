@@ -5,7 +5,7 @@ import (
 
 	monitoringv1 "github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
 	grafanav1alpha1 "github.com/integr8ly/grafana-operator/v3/pkg/apis/integreatly/v1alpha1"
-	"github.com/keycloak/keycloak-operator/pkg/k8sutil"
+	"github.com/keycloak/keycloak-realm-operator/pkg/k8sutil"
 	routev1 "github.com/openshift/api/route/v1"
 	policyv1beta1 "k8s.io/api/policy/v1beta1"
 	"k8s.io/client-go/discovery"

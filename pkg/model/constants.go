@@ -43,7 +43,7 @@ const (
 	ReadinessProbeProperty                     = "readiness_probe.sh"
 	RouteLoadBalancingStrategy                 = "source"
 	IngressDefaultHost                         = "keycloak.local"
-	PostgresqlBackupServiceAccountName         = "keycloak-operator"
+	PostgresqlBackupServiceAccountName         = "keycloak-realm-operator"
 	KeycloakExtensionEnvVar                    = "KEYCLOAK_EXTENSIONS"
 	KeycloakExtensionPath                      = "/opt/jboss/keycloak/standalone/deployments"
 	KeycloakExtensionsInitContainerPath        = "/opt/extensions"

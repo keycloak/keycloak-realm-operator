@@ -1,0 +1,15 @@
+# This is a reference for the Realm Manager Operator
+apiVersion: legacy.k8s.keycloak.org/v1alpha1
+kind: KeycloakRealm
+metadata:
+  name: external-realm
+  labels:
+    app: external-sso
+spec:
+  unmanaged: true
+  realm:
+    id: "basic"
+    realm: "basic"
+  instanceSelector:
+    matchLabels:
+      app: external-sso

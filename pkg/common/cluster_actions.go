@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
+	"github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
 	"github.com/pkg/errors"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
@@ -17,7 +17,7 @@ import (
 var log = logf.Log.WithName("action_runner")
 
 const (
-	authenticationConfigAlias string = "keycloak-operator-browser-redirector"
+	authenticationConfigAlias string = "keycloak-realm-operator-browser-redirector"
 )
 
 type ActionRunner interface {

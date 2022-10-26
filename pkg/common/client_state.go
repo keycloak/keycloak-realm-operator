@@ -3,8 +3,8 @@ package common
 import (
 	"context"
 
-	kc "github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
-	"github.com/keycloak/keycloak-operator/pkg/model"
+	kc "github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
+	"github.com/keycloak/keycloak-realm-operator/pkg/model"
 	v1 "k8s.io/api/core/v1"
 	apiErrors "k8s.io/apimachinery/pkg/api/errors"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -23,11 +23,11 @@ type ClientState struct {
 	DefaultClientScopes     []kc.KeycloakClientScope
 	OptionalClientScopes    []kc.KeycloakClientScope
 	DeprecatedClientSecret  *v1.Secret // keycloak-client-secret-<clientID>
-	Keycloak                kc.Keycloak
+	Keycloak                kc.ExternalKeycloak
 	ServiceAccountUserState *UserState
 }
 
-func NewClientState(context context.Context, realm *kc.KeycloakRealm, keycloak kc.Keycloak) *ClientState {
+func NewClientState(context context.Context, realm *kc.KeycloakRealm, keycloak kc.ExternalKeycloak) *ClientState {
 	return &ClientState{
 		Context:  context,
 		Realm:    realm,

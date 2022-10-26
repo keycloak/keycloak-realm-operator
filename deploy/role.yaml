@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: keycloak-operator
+  name: keycloak-realm-operator
 rules:
 - apiGroups:
   - ""
@@ -9,8 +9,6 @@ rules:
   - pods
   - services
   - services/finalizers
-  - endpoints
-  - persistentvolumeclaims
   - events
   - configmaps
   - secrets
@@ -24,109 +22,24 @@ rules:
   - delete
 - apiGroups:
   - apps
-  resources:
-  - deployments
-  - daemonsets
-  - replicasets
-  - statefulsets
-  verbs:
-  - list
-  - get
-  - create
-  - update
-  - watch
-  - delete
-- apiGroups:
-  - batch
-  resources:
-    - cronjobs
-    - jobs
-  verbs:
-    - list
-    - get
-    - create
-    - update
-    - watch
-- apiGroups:
-    - route.openshift.io
-  resources:
-    - routes/custom-host
-  verbs:
-    - create
-- apiGroups:
-  - route.openshift.io
-  resources:
-  - routes
-  verbs:
-  - list
-  - get
-  - create
-  - update
-  - watch
-- apiGroups:
-  - networking.k8s.io
-  resources:
-  - ingresses
-  verbs:
-  - list
-  - get
-  - create
-  - update
-  - watch
-- apiGroups:
-  - monitoring.coreos.com
-  resources:
-  - servicemonitors
-  - prometheusrules
-  verbs:
-  - list
-  - get
-  - create
-  - update
-  - watch
-- apiGroups:
-  - integreatly.org
-  resources:
-  - grafanadashboards
-  verbs:
-  - get
-  - list
-  - create
-  - update
-  - watch
-- apiGroups:
-  - apps
   resourceNames:
-  - keycloak-operator
+  - keycloak-realm-operator
   resources:
   - deployments/finalizers
   verbs:
   - update
 - apiGroups:
-  - policy
+  - legacy.k8s.keycloak.org
   resources:
-  - poddisruptionbudgets
-  verbs:
-  - get
-  - list
-  - create
-  - update
-  - watch
-- apiGroups:
-  - keycloak.org
-  resources:
-  - keycloaks
-  - keycloaks/status
-  - keycloaks/finalizers
+  - externalkeycloaks
+  - externalkeycloaks/status
+  - externalkeycloaks/finalizers
   - keycloakrealms
   - keycloakrealms/status
   - keycloakrealms/finalizers
   - keycloakclients
   - keycloakclients/status
   - keycloakclients/finalizers
-  - keycloakbackups
-  - keycloakbackups/status
-  - keycloakbackups/finalizers
   - keycloakusers
   - keycloakusers/status
   - keycloakusers/finalizers

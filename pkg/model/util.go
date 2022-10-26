@@ -9,7 +9,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
+	"github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
 	v1 "k8s.io/api/core/v1"
 )
 
@@ -232,45 +232,4 @@ func SanitizeResourceNameWithAlphaNum(text string) string {
 	}
 
 	return string(reg)
-}
-
-func AddPodLabels(cr *v1alpha1.Keycloak, labels map[string]string) map[string]string {
-	mergedPodLabels := map[string]string{}
-
-	// We add the labels
-	for key, value := range labels {
-		mergedPodLabels[key] = value
-	}
-
-	// We add the Pod Labels defined in the constants
-	for key, value := range PodLabels {
-		mergedPodLabels[key] = value
-	}
-
-	// We add the PodLabel labels coming from CR Env Vars
-	for key, value := range cr.Spec.KeycloakDeploymentSpec.PodLabels {
-		mergedPodLabels[key] = value
-	}
-
-	return mergedPodLabels
-}
-
-func AddPodAnnotations(cr *v1alpha1.Keycloak, annotations map[string]string) map[string]string {
-	if len(annotations) == 0 {
-		return nil
-	}
-
-	mergedAnnotations := map[string]string{}
-
-	// We add the labels
-	for key, value := range annotations {
-		mergedAnnotations[key] = value
-	}
-
-	// We add the PodLabel labels coming from CR Env Vars
-	for key, value := range cr.Spec.KeycloakDeploymentSpec.PodAnnotations {
-		mergedAnnotations[key] = value
-	}
-
-	return mergedAnnotations
 }

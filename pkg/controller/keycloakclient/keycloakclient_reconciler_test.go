@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1"
-	"github.com/keycloak/keycloak-operator/pkg/common"
-	"github.com/keycloak/keycloak-operator/pkg/model"
+	"github.com/keycloak/keycloak-realm-operator/pkg/apis/keycloak/v1alpha1"
+	"github.com/keycloak/keycloak-realm-operator/pkg/common"
+	"github.com/keycloak/keycloak-realm-operator/pkg/model"
 	"github.com/stretchr/testify/assert"
 	v1 "k8s.io/api/core/v1"
 	v13 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -16,7 +16,7 @@ import (
 
 func TestKeycloakClientReconciler_Test_Creating_Client(t *testing.T) {
 	// given
-	keycloakCr := v1alpha1.Keycloak{}
+	keycloakCr := v1alpha1.ExternalKeycloak{}
 	cr := &v1alpha1.KeycloakClient{
 		ObjectMeta: v13.ObjectMeta{
 			Name:      "test",
@@ -58,7 +58,7 @@ func TestKeycloakClientReconciler_Test_Creating_Client(t *testing.T) {
 
 func TestKeycloakClientReconciler_Test_Creating_ClientWithNonAlfhaNumCharsInClientID(t *testing.T) {
 	// given
-	keycloakCr := v1alpha1.Keycloak{}
+	keycloakCr := v1alpha1.ExternalKeycloak{}
 	cr := &v1alpha1.KeycloakClient{
 		ObjectMeta: v13.ObjectMeta{
 			Name:      "test",
@@ -99,7 +99,7 @@ func TestKeycloakClientReconciler_Test_Creating_ClientWithNonAlfhaNumCharsInClie
 
 func TestKeycloakClientReconciler_Test_PartialUpdate_Client(t *testing.T) {
 	// given
-	keycloakCr := v1alpha1.Keycloak{}
+	keycloakCr := v1alpha1.ExternalKeycloak{}
 	cr := &v1alpha1.KeycloakClient{
 		ObjectMeta: v13.ObjectMeta{
 			Name:      "test",
@@ -146,7 +146,7 @@ func TestKeycloakClientReconciler_Test_PartialUpdate_Client(t *testing.T) {
 
 func TestKeycloakClientReconciler_Test_Delete_Client(t *testing.T) {
 	// given
-	keycloakCr := v1alpha1.Keycloak{}
+	keycloakCr := v1alpha1.ExternalKeycloak{}
 	cr := &v1alpha1.KeycloakClient{
 		ObjectMeta: v13.ObjectMeta{
 			Name:      "test",
@@ -187,7 +187,7 @@ func TestKeycloakClientReconciler_Test_Delete_Client(t *testing.T) {
 
 func TestKeycloakClientReconciler_Test_Update_Client(t *testing.T) {
 	// given
-	keycloakCr := v1alpha1.Keycloak{}
+	keycloakCr := v1alpha1.ExternalKeycloak{}
 	cr := &v1alpha1.KeycloakClient{
 		ObjectMeta: v13.ObjectMeta{
 			Name:      "test",
@@ -365,7 +365,7 @@ func TestKeycloakClientReconciler_Test_Remove_Client_ID_Client_Secret(t *testing
 	// given
 	oldSecretName := model.ClientSecretName + "-client-id"
 	newSecretName := model.ClientSecretName + "-cr-name"
-	keycloakCr := v1alpha1.Keycloak{}
+	keycloakCr := v1alpha1.ExternalKeycloak{}
 	cr := &v1alpha1.KeycloakClient{
 		ObjectMeta: v13.ObjectMeta{
 			Name:      "cr-name",
