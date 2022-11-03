@@ -7,7 +7,6 @@ concurrency: keycloak-realm-operator-container-release
 
 jobs:
   publish:
-    if: github.repository == 'keycloak/keycloak-realm-operator' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
