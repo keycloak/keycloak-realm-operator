@@ -1032,7 +1032,7 @@ func (i *LocalConfigKeycloakFactory) AuthenticatedClient(kc v1alpha1.ExternalKey
 	//} else {
 	//	credentialSecret = kc.Status.CredentialSecret
 	//}
-	credentialSecret := "credential-" + kc.Name
+	credentialSecret := kc.Name + "-initial-admin"
 
 	adminCreds, err := secretClient.CoreV1().Secrets(kc.Namespace).Get(context.TODO(), credentialSecret, v12.GetOptions{})
 	if err != nil {

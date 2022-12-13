@@ -10,7 +10,7 @@ import (
 func KeycloakAdminSecret(cr *v1alpha1.ExternalKeycloak) *v1.Secret {
 	return &v1.Secret{
 		ObjectMeta: v12.ObjectMeta{
-			Name:      "credential-" + cr.Name,
+			Name:      cr.Name + "-initial-admin",
 			Namespace: cr.Namespace,
 			Labels: map[string]string{
 				"app":           ApplicationName,
@@ -27,7 +27,7 @@ func KeycloakAdminSecret(cr *v1alpha1.ExternalKeycloak) *v1.Secret {
 
 func KeycloakAdminSecretSelector(cr *v1alpha1.ExternalKeycloak) client.ObjectKey {
 	return client.ObjectKey{
-		Name:      "credential-" + cr.Name,
+		Name:      cr.Name + "-initial-admin",
 		Namespace: cr.Namespace,
 	}
 }
