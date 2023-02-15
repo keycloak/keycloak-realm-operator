@@ -91,6 +91,10 @@ setup/linter:
 code/run:
 	@operator-sdk run local --watch-namespace=${NAMESPACE}
 
+.PHONY: code/run-debug
+code/run-debug:
+	@operator-sdk run local --enable-delve --watch-namespace=${NAMESPACE}
+
 .PHONY: code/run-as-container
 code/run-as-container: code/delete-container
 	eval $$(minikube -p minikube docker-env); \

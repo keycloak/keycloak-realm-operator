@@ -203,6 +203,64 @@ func TestKeycloakClientReconciler_Test_Update_Client(t *testing.T) {
 				AuthorizationServicesEnabled: true,
 				DefaultClientScopes:          []string{"profile"},
 				OptionalClientScopes:         []string{"email"},
+				AuthorizationSettings: &v1alpha1.KeycloakResourceServer{
+					AllowRemoteResourceManagement: true,
+					DecisionStrategy:              "UNANIMOUS",
+					PolicyEnforcementMode:         "ENFORCING",
+					Policies: []v1alpha1.KeycloakPolicy{
+						{
+							ID:               "update-policy-1",
+							Name:             "Update Policy",
+							DecisionStrategy: "UNANIMOUS",
+							Logic:            "POSITIVE",
+							Type:             "role",
+							Config:           map[string]string{"roles": "[{\"id\":\"test/update\",\"required\":true}]"},
+						},
+						{
+							ID:               "update-permission-1",
+							Name:             "Update Permission 2",
+							DecisionStrategy: "UNANIMOUS",
+							Logic:            "POSITIVE",
+							Type:             "resource",
+							Config: map[string]string{
+								"applyPolicies": "[\"Update Policy\"",
+								"resources":     "[\"Update Resource\"]",
+							},
+						},
+						{
+							Name:             "Patch Policy",
+							DecisionStrategy: "UNANIMOUS",
+							Logic:            "POSITIVE",
+							Type:             "role",
+							Config:           map[string]string{"roles": "[{\"id\":\"test/update\",\"required\":true}]"},
+						},
+						{
+							Name:             "Patch Permission",
+							DecisionStrategy: "UNANIMOUS",
+							Logic:            "POSITIVE",
+							Type:             "resource",
+							Config: map[string]string{
+								"applyPolicies": "[\"Patch Policy\"",
+								"resources":     "[\"Patch Resource\"]",
+							},
+						},
+					},
+					Resources: []v1alpha1.KeycloakResource{
+						{
+							ID:                 "update-resource-1",
+							DisplayName:        "Update Resource Updated!",
+							Name:               "Update Resource",
+							OwnerManagedAccess: false,
+							Uris:               []string{"/api/update/*"},
+						},
+						{
+							DisplayName:        "Patch Resource",
+							Name:               "Patch Resource",
+							OwnerManagedAccess: false,
+							Uris:               []string{"/api/patch/*"},
+						},
+					},
+				},
 			},
 			Roles: []v1alpha1.RoleRepresentation{
 				{ID: "delete_recreateID2", Name: "delete_recreate"},
@@ -243,6 +301,62 @@ func TestKeycloakClientReconciler_Test_Update_Client(t *testing.T) {
 		AvailableClientScopes: []v1alpha1.KeycloakClientScope{{Name: "address", ID: "222"}, {Name: "email", ID: "421"}, {Name: "profile", ID: "314"}},
 		DefaultClientScopes:   []v1alpha1.KeycloakClientScope{},
 		OptionalClientScopes:  []v1alpha1.KeycloakClientScope{{Name: "address", ID: "222"}},
+		AuthorizationResources: []v1alpha1.KeycloakResource{
+			{
+				ID:                 "delete-resource-1",
+				DisplayName:        "Delete Resource",
+				Name:               "Delete Resource",
+				OwnerManagedAccess: false,
+				Uris:               []string{"/api/delete/*"},
+			},
+			{
+				ID:                 "update-resource-1",
+				DisplayName:        "Update Resource",
+				Name:               "Update Resource",
+				OwnerManagedAccess: false,
+				Uris:               []string{"/api/update/*"},
+			},
+		},
+		AuthorizationPolicies: []v1alpha1.KeycloakPolicy{
+			{
+				ID:               "delete-policy-1",
+				Name:             "Delete Policy",
+				DecisionStrategy: "UNANIMOUS",
+				Logic:            "POSITIVE",
+				Type:             "role",
+				Config:           map[string]string{"roles": "[{\"id\":\"test/update\",\"required\":true}]"},
+			},
+			{
+				ID:               "delete-permission-1",
+				Name:             "Delete Permission",
+				DecisionStrategy: "UNANIMOUS",
+				Logic:            "POSITIVE",
+				Type:             "resource",
+				Config: map[string]string{
+					"applyPolicies": "[\"Delete Policy\"",
+					"resources":     "[\"Delete Resource\"]",
+				},
+			},
+			{
+				ID:               "update-policy-1",
+				Name:             "Update Policy",
+				DecisionStrategy: "UNANIMOUS",
+				Logic:            "POSITIVE",
+				Type:             "role",
+				Config:           map[string]string{"roles": "[{\"id\":\"test/update\",\"required\":true}]"},
+			},
+			{
+				ID:               "update-permission-1",
+				Name:             "Update Permission",
+				DecisionStrategy: "UNANIMOUS",
+				Logic:            "POSITIVE",
+				Type:             "resource",
+				Config: map[string]string{
+					"applyPolicies": "[\"Update Policy\"",
+					"resources":     "[\"Update Resource\"]",
+				},
+			},
+		},
 	}
 
 	// when
@@ -289,7 +403,34 @@ func TestKeycloakClientReconciler_Test_Update_Client(t *testing.T) {
 	assert.IsType(t, common.DeleteClientOptionalClientScopeAction{}, desiredState[16])
 	assert.Equal(t, "222", desiredState[16].(common.DeleteClientOptionalClientScopeAction).ClientScope.ID)
 
-	assert.Equal(t, 17, len(desiredState))
+	assert.IsType(t, common.DeleteClientAuthorizationResourceAction{}, desiredState[17])
+	assert.Equal(t, "delete-resource-1", desiredState[17].(common.DeleteClientAuthorizationResourceAction).AuthorizationResource.ID)
+	assert.IsType(t, common.UpdateClientAuthorizationResourceAction{}, desiredState[18])
+	assert.Equal(t, "update-resource-1", desiredState[18].(common.UpdateClientAuthorizationResourceAction).NewAuthorizationResource.ID)
+	assert.IsType(t, common.CreateClientAuthorizationResourceAction{}, desiredState[19])
+	assert.Equal(t, "Patch Resource", desiredState[19].(common.CreateClientAuthorizationResourceAction).
+		AuthorizationResource.Name)
+
+	assert.IsType(t, common.DeleteClientAuthorizationPolicyAction{}, desiredState[20])
+	assert.Equal(t, "delete-policy-1", desiredState[20].(common.DeleteClientAuthorizationPolicyAction).
+		AuthorizationPolicy.ID)
+	assert.IsType(t, common.DeleteClientAuthorizationPolicyAction{}, desiredState[21])
+	assert.Equal(t, "delete-permission-1", desiredState[21].(common.DeleteClientAuthorizationPolicyAction).
+		AuthorizationPolicy.ID)
+	assert.IsType(t, common.UpdateClientAuthorizationPolicyAction{}, desiredState[22])
+	assert.Equal(t, "update-policy-1", desiredState[22].(common.UpdateClientAuthorizationPolicyAction).
+		NewAuthorizationPolicy.ID)
+	assert.IsType(t, common.UpdateClientAuthorizationPolicyAction{}, desiredState[23])
+	assert.Equal(t, "update-permission-1", desiredState[23].(common.UpdateClientAuthorizationPolicyAction).
+		NewAuthorizationPolicy.ID)
+	assert.IsType(t, common.CreateClientAuthorizationPolicyAction{}, desiredState[24])
+	assert.Equal(t, "Patch Policy", desiredState[24].(common.CreateClientAuthorizationPolicyAction).
+		AuthorizationPolicy.Name)
+	assert.IsType(t, common.CreateClientAuthorizationPolicyAction{}, desiredState[25])
+	assert.Equal(t, "Patch Permission", desiredState[25].(common.CreateClientAuthorizationPolicyAction).
+		AuthorizationPolicy.Name)
+
+	assert.Equal(t, 26, len(desiredState))
 }
 
 func TestKeycloakClientReconciler_Test_Marshal_Client(t *testing.T) {
