@@ -219,6 +219,82 @@ func FilterClientScopesByNames(clientScopes []v1alpha1.KeycloakClientScope, name
 	return filteredScopes
 }
 
+func AuthorizationPoliciesDifferenceIntersection(a []v1alpha1.KeycloakPolicy, b []v1alpha1.KeycloakPolicy) (d []v1alpha1.KeycloakPolicy, i []v1alpha1.KeycloakPolicy) {
+	for _, policy := range a {
+		if hasMatchingPolicy(b, policy) {
+			i = append(i, policy)
+		} else {
+			d = append(d, policy)
+		}
+	}
+
+	return d, i
+}
+
+func hasMatchingPolicy(policies []v1alpha1.KeycloakPolicy, otherPolicy v1alpha1.KeycloakPolicy) bool {
+	for _, policy := range policies {
+		if policyMatches(policy, otherPolicy) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func policyMatches(a v1alpha1.KeycloakPolicy, b v1alpha1.KeycloakPolicy) bool {
+	if a.ID != "" && b.ID != "" {
+		return a.ID == b.ID
+	}
+
+	return a.Name == b.Name
+}
+
+func AuthorizationResourcesDifferenceIntersection(a []v1alpha1.KeycloakResource, b []v1alpha1.KeycloakResource) (d []v1alpha1.KeycloakResource, i []v1alpha1.KeycloakResource) {
+	for _, resource := range a {
+		if hasMatchingResource(b, resource) {
+			i = append(i, resource)
+		} else {
+			d = append(d, resource)
+		}
+	}
+
+	return d, i
+}
+
+func hasMatchingResource(resources []v1alpha1.KeycloakResource, otherResource v1alpha1.KeycloakResource) bool {
+	for _, resource := range resources {
+		if resourceMatches(resource, otherResource) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func resourceMatches(a v1alpha1.KeycloakResource, b v1alpha1.KeycloakResource) bool {
+	if a.ID != "" && b.ID != "" {
+		return a.ID == b.ID
+	}
+
+	return a.Name == b.Name
+}
+
+func FilterAuthorizationPoliciesByName(policies []v1alpha1.KeycloakPolicy, names []string) (filteredPolicies []v1alpha1.KeycloakPolicy) {
+	hashMap := make(map[string]v1alpha1.KeycloakPolicy)
+
+	for _, policy := range policies {
+		hashMap[policy.Name] = policy
+	}
+
+	for _, name := range names {
+		if policy, retrieved := hashMap[name]; retrieved {
+			filteredPolicies = append(filteredPolicies, policy)
+		}
+	}
+
+	return filteredPolicies
+}
+
 func SanitizeResourceNameWithAlphaNum(text string) string {
 	// we only want letters and numbers
 	reg := []rune(SanitizeResourceName(text))
